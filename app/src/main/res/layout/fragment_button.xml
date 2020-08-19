@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ButtonFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+<Button
+    android:id="@+id/startButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="start"
+    android:textColor="@android:color/holo_green_light"
+    android:layout_centerInParent="true" />
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stop"
+        android:enabled="false"
+        android:layout_toRightOf="@+id/startButton"
+        android:textColor="@android:color/holo_red_light"
+        android:layout_gravity="center"/>
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="reset"
+        android:enabled="false"
+        android:layout_toLeftOf="@+id/startButton"
+        android:textColor="@android:color/holo_orange_light"
+        android:layout_gravity="center"/>
+
+
+</RelativeLayout>
