@@ -4,70 +4,68 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.RectF;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class canvas extends View {
+ sound mSound;
+    int fontSize=0;
+    Paint brush;
+    Paint mPaint;
+    Paint mPaint2;
+    Context mContext;
+    android.graphics.Canvas mCanvas;
+    Bitmap bitmap;
+    int height,width;
+    int radius=0;
+    ArrayList<model> mModels=new ArrayList<>();
+    ArrayList<model> mModels2=new ArrayList<>();
+    Boolean draw=false;
+    int bh;
+    int bw;
+    String clock="reset";
+    int c=0;
+    int c2=-1;
+    int count=0;
 
     public canvas(Context context) {
         super(context);
 
         mContext=context;
+        mSound=new sound(mContext.getApplicationContext());
         init();
     }
 
     public canvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mContext=context;
+        mSound=new sound(mContext.getApplicationContext());
         init();
     }
 
     public canvas(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext=context;
+        mSound=new sound(mContext.getApplicationContext());
         init();
     }
 
-    private int[] numbers = {1,2,3,4,5,6,7,8,9,10,11,12};
-    private Rect rect = new Rect();
-    int fontSize=0;
-        Paint filler;
-        Path mPath;
-        Paint brush;
-        Paint mPaint;
-    Paint mPaint2;
-        Context mContext;
-        android.graphics.Canvas mCanvas;
-        Bitmap bitmap;
-        List<Point> mPoints =new ArrayList<>();
-        ArrayList<Bitmap> mBitmaps=new ArrayList<>();
-        private int mLastPointIndex = 0;
-        private int mTouchTolerance;
-        private boolean isPathStarted = false;
-        int height,width;
-        int radius=0;
 
         public void init(){
             fontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10,
                     getResources().getDisplayMetrics());
-            mPath= new Path();
+
             brush=new Paint(Paint.ANTI_ALIAS_FLAG);
             brush.setAntiAlias(true);
             brush.setDither(true);
@@ -76,13 +74,7 @@ public class canvas extends View {
             brush.setStrokeJoin(Paint.Join.ROUND);
             brush.setStrokeCap(Paint.Cap.ROUND);
             brush.setStrokeWidth(6f);
-            filler=new Paint(Paint.ANTI_ALIAS_FLAG);
-            filler.setAntiAlias(true);
-            filler.setDither(true);
-            filler.setColor(getResources().getColor(android.R.color.secondary_text_light));
-            filler.setStyle(Paint.Style.FILL);
-            filler.setStrokeCap(Paint.Cap.ROUND);
-            filler.setStrokeJoin(Paint.Join.ROUND);
+
             mPaint2=new Paint(Paint.ANTI_ALIAS_FLAG);
             mPaint2.setAntiAlias(true);
             mPaint2.setDither(true);
@@ -112,9 +104,7 @@ public class canvas extends View {
             Bitmap.createBitmap(18,bw/2, Bitmap.Config.ARGB_8888);
 
         }
-        Boolean draw=false;
-        int bh;
-        int bw;
+
         @Override
         protected void onDraw(Canvas canvas) {
             int h=getResources().getDisplayMetrics().heightPixels;
@@ -122,16 +112,11 @@ public class canvas extends View {
 
             canvas.drawBitmap(b,0,0,mPaint);
              canvas.drawCircle(bw/2,bh/2,bw/2-25,brush);
-            //canvas.drawCircle(bw/2,bh/2,bw/2-25-6,filler);
-
             canvas.drawCircle(bw/2,bh/4,bw/4-50-mPaint.getTextSize(),brush);
-             int x1= (int) (bw/2-mPaint.getTextSize()/2+50);
-             int y1=(int) mPaint.getTextSize()+50;
-            drawSeconds(canvas);
-            drawMinutes(canvas);
-                canvas.drawCircle(bw / 2, bh / 2, 10, mPaint);
+            canvas.drawCircle(bw / 2, bh / 2, 10, mPaint);
             canvas.drawCircle(bw / 2, bh / 4, 8, mPaint);
-
+            SecondsText(canvas);
+            MinutesText(canvas);
             canvas.drawText("Made  By  Muhesh",bw/2-4*mPaint.getTextSize(),
                     bh/2+10*mPaint.getTextSize(),mPaint);
             if(clock.equals("start"))
@@ -149,6 +134,7 @@ public class canvas extends View {
                     drawtick2(canvas,c2);
                 }
                 c++;
+                mSound.tick();
                 postInvalidateDelayed(1000);
 
             }
@@ -168,11 +154,8 @@ public class canvas extends View {
             }
             super.onDraw(canvas);
         }
-        String clock="reset";
-        int c=0;
-        int c2=-1;
-        int count=0;
-    private void drawSeconds(Canvas canvas) {
+
+    private void SecondsText(Canvas canvas) {
      mPaint.setTextSize(fontSize);
 
         for (int i=1;i<=60;++i) {
@@ -196,7 +179,7 @@ public class canvas extends View {
            canvas.drawText(tmp, x, y, mPaint);
         }
     }
-    private void drawMinutes(Canvas canvas) {
+    private void MinutesText(Canvas canvas) {
 
         for (int i=1;i<=15;++i) {
             String tmp = String.valueOf(i);
@@ -248,6 +231,5 @@ float ox,oy,nx,ny;
       clock="reset";
       invalidate();
   }
-ArrayList<model> mModels=new ArrayList<>();
-    ArrayList<model> mModels2=new ArrayList<>();
+
 }
